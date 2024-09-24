@@ -1,57 +1,48 @@
 package com.assignment.sveltetech.viewmodels
 
-import android.app.Application
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.assignment.sveltetech.db.ChatDatabase
 import com.assignment.sveltetech.db.ChatDatabaseClient
 import com.assignment.sveltetech.db.Message
-import com.assignment.sveltetech.db.User
-import com.assignment.sveltetech.manager.SocketManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ChatViewModel(context: Context) : ViewModel() {
-    val chatDao = ChatDatabaseClient.getInstance(context)?.getFileAppDatabase()?.chatDao()
-    val messages: LiveData<List<Message>>? = chatDao?.getAllMessages()
+class ChatViewModel(val ctx: Context) : ViewModel() {
+    val messages = SnapshotStateList<Message>()
+    val ownIP = mutableStateOf("")
+    val connectionText = mutableStateOf("")
+    val connectionTextColor = mutableStateOf<Int?>(null)
+    val receiverIP = mutableStateOf("")
+    val loggedIn = mutableStateOf(false)
 
-    private var userId: String? = null
-
-    fun setUser(deviceId: String, name: String) {
-        viewModelScope.launch {
-            val user = User(deviceId, name)
-            chatDao?.insertUser(user)
-            userId = deviceId
-        }
-    }
-
-    fun sendMessage(content: String) {
-       if (SocketManager.getSocket().connected()){
-            userId?.let { deviceId ->
-                val message = Message(deviceId = deviceId, sender = deviceId, content = content)
-                viewModelScope.launch {
-                    chatDao?.insertMessage(message)
-                    // Emit the message through Socket.IO
-                    SocketManager.getSocket().emit("chatMessage", message)
+    fun fetchDataBaseMessages() {
+        if(messages.size==0) {
+            viewModelScope.launch(Dispatchers.IO) {
+                ChatDatabaseClient(ctx).getFileAppDatabase().chatDao()?.getAllMessages()?.let {
+                    messages.addAll(it)
                 }
             }
         }
     }
 
-    fun receiveMessage(msg: Message) {
-        if (SocketManager.getSocket().connected()) {
-            viewModelScope.launch {
-                chatDao?.insertMessage(msg)
-            }
+    fun insertMessage(message: Message) {
+        viewModelScope.launch(Dispatchers.IO) {
+            ChatDatabaseClient(ctx).getFileAppDatabase().chatDao()?.insertMessage(message)
         }
     }
 
-    fun getUser(deviceId: String): LiveData<User?> {
-        return liveData {
-            emit(chatDao?.getUserById(deviceId))
+    fun backToInitial() {
+        messages.clear()
+        deleteAllMessages()
+        receiverIP.value = ""
+    }
+
+    private fun deleteAllMessages() {
+        viewModelScope.launch(Dispatchers.IO) {
+            ChatDatabaseClient(ctx).getFileAppDatabase().chatDao()?.deleteAllMessages()
         }
     }
 }

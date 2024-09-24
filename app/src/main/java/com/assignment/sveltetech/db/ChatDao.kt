@@ -11,12 +11,9 @@ interface ChatDao {
     @Insert
     suspend fun insertMessage(message: Message)
 
-    @Query("SELECT * FROM messages ORDER BY timestamp ASC")
-    fun getAllMessages(): LiveData<List<Message>>
+    @Query("SELECT * FROM messages ORDER BY sentAt ASC")
+    fun getAllMessages(): List<Message>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
-
-    @Query("SELECT * FROM users WHERE deviceId = :deviceId LIMIT 1")
-    suspend fun getUserById(deviceId: String): User?
+    @Query("DELETE FROM messages")
+    suspend fun deleteAllMessages()
 }

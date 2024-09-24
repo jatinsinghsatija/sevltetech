@@ -7,6 +7,7 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        maven ("https://jitpack.io" )
         mavenCentral()
         gradlePluginPortal()
     }
@@ -19,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "sveltetech"
+rootProject.name = "SvelteTech"
 include(":app")
  
