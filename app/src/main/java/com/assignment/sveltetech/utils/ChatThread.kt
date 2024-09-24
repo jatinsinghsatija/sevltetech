@@ -62,8 +62,6 @@ class ChatThread : Thread {
             }
             initSocket.close()
         } catch (e: IOException) {
-            text?.value = "Server Socket initialization failed. Port already in use."
-            textBackColor?.value=Color.parseColor("#FF0800")
             e.printStackTrace()
         }
     }
@@ -82,7 +80,7 @@ class ChatThread : Thread {
             Log.d(TAG, "onPostExecute: Result $result")
             withContext(Dispatchers.Main) {
                 val mm=Message(0,result, Calendar.getInstance().timeInMillis,1 )
-                messageArray?.add(mm)
+                messageArray?.add(0,mm)
                 viewModel?.insertMessage(mm)
             }
         }

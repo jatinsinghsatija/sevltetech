@@ -48,7 +48,7 @@ class User(
     private fun onMessageSent(result: String) {
         Log.i(TAG, "on post execution result => $result")
         val msg = Message(0, result, Calendar.getInstance().timeInMillis, 0)
-        messageArray.add(msg)
+        messageArray.add(0,msg)
         viewModel.insertMessage(msg)
     }
 }

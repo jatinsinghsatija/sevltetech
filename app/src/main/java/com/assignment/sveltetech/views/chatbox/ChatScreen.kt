@@ -69,7 +69,8 @@ fun ChatScreen(viewModel: ChatViewModel, listener: CommonListener) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
+            reverseLayout = true
         ) {
             items(messages) { message ->
                 ChatMessageItem(message)

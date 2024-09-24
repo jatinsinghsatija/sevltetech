@@ -37,7 +37,7 @@ fun IPScreen(viewModel: ChatViewModel,listener:CommonListener) {
                 onValueChange = { receiverIP = it },
                 label = { Text("Enter Reciever's IP Address") }
             )
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            Button(onClick = {
                     listener.onConnectToIP(receiverIP)
             }) {
                 Text("Connect")
