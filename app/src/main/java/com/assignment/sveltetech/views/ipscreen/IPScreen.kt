@@ -22,20 +22,18 @@ import com.assignment.sveltetech.viewmodels.ChatViewModel
 @Composable
 fun IPScreen(viewModel: ChatViewModel,listener:CommonListener) {
     var receiverIP by remember { viewModel.receiverIP }
-    var ownIP by remember { viewModel.ownIP }
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Our IP: $ownIP")
         Row(verticalAlignment = Alignment.CenterVertically) {
             TextField(
                 modifier=Modifier.weight(1f),
                 value = receiverIP,
                 onValueChange = { receiverIP = it },
-                label = { Text("Enter Reciever's IP Address") }
+                label = { Text("EnterIP Address") }
             )
             Button(onClick = {
                     listener.onConnectToIP(receiverIP)

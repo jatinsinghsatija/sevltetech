@@ -37,9 +37,6 @@ import com.assignment.sveltetech.viewmodels.ChatViewModel
 fun ChatScreen(viewModel: ChatViewModel, listener: CommonListener) {
     val messages = remember { viewModel.messages }
     var messageText by remember { mutableStateOf("") }
-    var receiverIP by remember { viewModel.receiverIP }
-    var conText by remember { viewModel.connectionText }
-    var conTextColor by remember { viewModel.connectionTextColor }
 
     Column(modifier=Modifier.fillMaxSize().imePadding()) {
         Row(
@@ -48,7 +45,6 @@ fun ChatScreen(viewModel: ChatViewModel, listener: CommonListener) {
                 .background(Color.White)
                 .padding(10.dp)
         ) {
-            Text(modifier = Modifier.weight(1f), text = "Connected to $receiverIP")
             Image(
                 modifier = Modifier.clickable {
                     listener.onLogOut()
@@ -57,15 +53,6 @@ fun ChatScreen(viewModel: ChatViewModel, listener: CommonListener) {
                 contentDescription = null
             )
         }
-        val color = if (conTextColor != null) Color(conTextColor!!) else Color.Black
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = color)
-                .padding(5.dp),
-            text = conText,
-            color = Color.White
-        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()

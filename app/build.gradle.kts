@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     kapt ("androidx.room:room-compiler:2.6.1")
     implementation ("io.socket:socket.io-client:2.0.0")
+    implementation ("androidx.work:work-runtime-ktx:2.7.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

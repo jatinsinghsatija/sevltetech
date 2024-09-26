@@ -6,10 +6,11 @@ import java.util.Date
 
 @Entity(tableName = "messages")
 data class Message(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val senderIp: String,
     val message: String,
-    val sentAt: Long,
-    val type: Int
+    val type: Int,
+    val sentAt: Long = System.currentTimeMillis()
 ) {
     fun isSent(): Boolean {
         return (type == 0)
